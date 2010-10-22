@@ -135,3 +135,13 @@
       (progn
 	(funcall func (car list))
 	(for-list func (cdr list)))))
+
+;; ex 2.24, of course I won't tree structure
+; '(1 (2 (3 4))) would be sufficient.
+; 
+(defun count-leaves (lst)
+  (cond ((null lst) 0)
+	((not (consp lst)) 1)
+	(t (+ 
+	    (count-leaves (car lst))
+	    (count-leaves (cdr lst))))))
