@@ -145,3 +145,9 @@
 	(t (+ 
 	    (count-leaves (car lst))
 	    (count-leaves (cdr lst))))))
+
+(defun deep-reverse (lst)
+  (cond ((null lst) nil)
+	((listp lst) (append (deep-reverse (cdr lst))
+			     (deep-reverse (car lst))))
+	(t  (list lst))))
