@@ -146,8 +146,19 @@
 	    (count-leaves (car lst))
 	    (count-leaves (cdr lst))))))
 
+;; ex 2.27
 (defun deep-reverse (lst)
   (cond ((null lst) nil)
-	((listp lst) (append (deep-reverse (cdr lst))
-			     (deep-reverse (car lst))))
-	(t  (list lst))))
+	((consp (car lst)) (append (deep-reverse (cdr lst))
+				   (list (deep-reverse (car lst)))))
+	(t (append (deep-reverse (cdr lst)) 
+		   (list (car lst))))))
+;; ex 2.28
+(defun flatten (tree)
+  (cond  ((null tree) nil)
+	 ((consp (car tree)) (append (flatten (car tree))
+				     (flatten (cdr tree))))
+	 (t (append (list (car tree)) (flatten (cdr tree))))))
+;;; count-leaves, deep-reverse, flatten all contain exactly same code with very subtle
+;   difference in function calls here and there. It should be possible to make a
+;   carefully thought out higher order procedure.
