@@ -4,6 +4,7 @@
 ;; ex 1.3. Return sum of squares of big two numbers of three.
 ;; 
 (defparameter DELTA 0.0001)
+(defvar dx 0.00001)
 (defun sum-squares (a b)
 (+ (square a)
    (square b)))
@@ -287,7 +288,6 @@
 (defun deriv(g) 
   (lambda (x)
     (/ (- (funcall g ( + x dx)) (funcall g x)) dx)))
-(defvar dx 0.00001)
 (defvar *delta* 0.00001)
 (defun fixed-point (f guess)
   (labels ((close-enough (val1 val2)
@@ -302,6 +302,10 @@
   (lambda (x) (average x (funcall f x))))
 (defun average (num1 num2)
   (/ (+ num1 num2) 2))
+
+(defun newtons-transform (g)
+  (lambda (x) (- x (/ (funcall g x) (funcall (deriv g) x)))))
+
 (defun newtons-method (g guess)
   (fixed-point (newtons-transform g) guess))
 (defun square-root-newton (num)
@@ -347,3 +351,4 @@
   (cond ((< exp 0) nil)
 	((zerop exp) 1)
 	(t (* base (pow base (1- exp))))))
+
