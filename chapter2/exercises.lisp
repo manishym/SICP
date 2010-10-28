@@ -162,3 +162,45 @@
 ;;; count-leaves, deep-reverse, flatten all contain exactly same code with very subtle
 ;   difference in function calls here and there. It should be possible to make a
 ;   carefully thought out higher order procedure.
+
+
+;;; ex 2.29 A binary mobile contains two branches, left branch and right branch.
+;   Each branch is a rod of certain length, from which hangs a weight or
+;   another binary mobile. A make binary tree can be defined as
+;   (defun make-binary-mobile (left right)
+;     (list left right))
+;   make-branch can be defined as (list length structure) where, structure
+;   can be a weight or another binary mobile. Write selectors left-branch,
+;   right-branch and branch-length and branch-structure
+
+
+
+
+(defun left-branch (bm)
+  (first bm))
+(defun right-branch (bm)
+  (second bm))
+(defun make-binary-mobile (left right)
+  (list left right))
+(defun make-branch (length structure)
+  (list length structure))
+(defun branch-structure (branch)
+  (second branch))
+(defun total-weight (bm)
+  (labels ((get-weight (br)
+	     (cond  ((null br) 0)
+		    ((binary-mobile-p  br)
+		     (total-weight br))
+		    (t br))))
+    (let ((ls (branch-structure (left-branch bm)))
+	  (rs (branch-structure (right-branch bm))))
+      (cond ((not (binary-mobile-p bm)) nil)
+	    (t (+ (get-weight ls) (get-weight rs)))))))
+(defun bm-balancedp (bm)
+  (cond ((null bm) t)
+	((numberp bm) t)
+	(t (and 
+	    (= (branch-torque (left-branch bm))
+	       (branch-torque (right-branch bm))))
+	   (bm-balancedp (branch-structure (left-branch bm)))
+	   (bm-balancedp (branch-structure (right-branch bm))))))
