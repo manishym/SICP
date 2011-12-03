@@ -96,3 +96,20 @@
            ((email :parameter-type 'string)
             (password :parameter-type 'string))
          (index-page :email email :password password))
+
+(defun ps-plot-weight (xvals yvals)
+  (with-html-output-to-string (*standard-output* nil :indent  t)
+    (:script :type "text/javascript" :src "/static/javascript/g.raphael/raphael.js")
+    (:script :type "text/javascript" :src "/static/javascript/g.raphael/g.raphael-min.js")
+    (:script :type "text/javascript" :src "/static/javascript/g.raphael/g.line-min.js")
+    (:script :type "text/javascript"
+	     (str (ps* 
+		   `(progn 
+		      (var *x-axis-var* (array ,@xvals))
+		      (var *y-axis-var* (*array ,@yvals))))))
+    (:script :type "text/javascript"
+	     (str (ps (setf 
+		       (getprop window 'onload) 
+		       (lambda ()  
+			 (var r (*Raphael "holder"))
+			 (var linechart (r.g.linechart 100 100 300 300  *x-axis-var*  *y-axis-var*)))))))))
