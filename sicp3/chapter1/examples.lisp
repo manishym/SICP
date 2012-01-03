@@ -94,3 +94,31 @@
         ((< amt 0) 0)
         (t (+ (count-change-rec amt (rest coins))
               (count-change-rec (- amt (first coins)) coins)))))
+
+(defun slow-exp-iter (b n count)
+  (if (zerop n)
+      count
+      (slow-exp-iter b (- n 1) (* count b))))
+
+(defun expt-iter (b n)
+  (slow-exp-iter b n 1))
+
+(defun exp-fast (b n)
+  (if (= n 0)
+      1
+      (if (evenp n)
+          (square (exp-fast b (/ n 2)))
+          (* b (exp-fast b (- n 1))))))
+
+(defun square (n)
+  (* n n))
+(defun fast-expt-iter (b n)
+  (labels (
+           (iter ( sum n)
+             (if (= 0 n)
+                 sum
+                 (if (evenp n)
+                     (iter (square sum) (/ n 2))
+                     (iter (* b sum) (1- n))))))
+    (iter b n)))
+
